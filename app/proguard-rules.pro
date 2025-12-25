@@ -42,11 +42,11 @@
     <init>(...);
     *;
 }
--keep class me.neko.nzhelper.ui.util.*JsonAdapter {
+-keep class me.restarhalf.deer.ui.util.*JsonAdapter {
     <init>(...);
     *;
 }
 # 保留 data class（可选，通常反射也需要）
--keep class me.neko.nzhelper.ui.util.GitHubRelease {
+-keep class me.restarhalf.deer.ui.util.GitHubRelease {
     *;
 }

@@ -30,7 +30,7 @@
         </activity>
 
         <service
-            android:name="me.neko.nzhelper.ui.service.TimerService"
+            android:name="me.restarhalf.deer.ui.service.TimerService"
             android:exported="false"
             android:foregroundServiceType="dataSync" />
     </application>
