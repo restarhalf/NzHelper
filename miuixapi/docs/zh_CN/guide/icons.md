@@ -1,0 +1,102 @@
+# 图标系统
+
+Miuix 提供了丰富的内置图标系统，可以满足多数应用的主要设计需求。这些图标按功能和用途分为不同的类别，便于您在项目中使用。
+
+## 使用方法
+
+要在您的项目中使用 Miuix 图标，首先需要正确引入：
+
+```kotlin
+import androidx.compose.foundation.layout.size
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.icon.MiuixIcons
+```
+
+然后，您可以通过以下方式使用图标：
+
+```kotlin
+// 使用 Basic 分类下的 Check 图标
+Icon(
+    imageVector = MiuixIcons.Basic.Check,
+    contentDescription = "Check",
+    modifier = Modifier.size(24.dp)
+)
+
+// 使用 Useful 分类下的 Settings 图标
+Icon(
+    imageVector = MiuixIcons.Useful.Settings,
+    contentDescription = "Settings",
+    modifier = Modifier.size(24.dp)
+)
+```
+
+## 图标分类
+
+Miuix 图标系统目前包含以下几个主要分类：
+
+### Basic（基础图标）
+
+基础图标包含一些常用的基本界面元素，如箭头、勾选等，这些图标在 Miuix 本身的组件中也会使用到。以下是完整的列表：
+
+| 预览                                                                        | 图标名                     | 描述        |
+|---------------------------------------------------------------------------|-------------------------|-----------|
+| <img src="/icons/basic/Check.svg" />                                      | `Check`                 | 勾选图标      |
+| <img src="/icons/basic/ArrowUpDown.svg" />                                | `ArrowUpDown`           | 上下箭头图标    |
+| <img src="/icons/basic/ArrowUpDownIntegrated.svg" style="width: 15px;" /> | `ArrowUpDownIntegrated` | 集成的上下箭头图标 |
+| <img src="/icons/basic/ArrowRight.svg" style="width: 15px;" />            | `ArrowRight`            | 向右箭头图标    |
+| <img src="/icons/basic/Search.svg" />                                     | `Search`                | 搜索图标      |
+| <img src="/icons/basic/SearchCleanup.svg" />                              | `SearchCleanup`         | 清空搜索图标    |
+
+### Useful（实用图标）
+
+实用图标包含大量常用的功能性图标，适用于各种应用场景。以下是完整的列表：
+
+| 预览                                              | 图标名               | 描述        | 常见用途             |
+|-------------------------------------------------|-------------------|-----------|------------------|
+| <img src="/icons/useful/AddSecret.svg" />       | `AddSecret`       | 添加加密内容图标  | 添加密码、隐私项等需要加密的内容 |
+| <img src="/icons/useful/Back.svg" />            | `Back`            | 返回图标      | 导航返回上一级界面        |
+| <img src="/icons/useful/Blocklist.svg" />       | `Blocklist`       | 黑名单图标     | 拉黑用户、添加屏蔽项       |
+| <img src="/icons/useful/Cancel.svg" />          | `Cancel`          | 取消图标      | 取消操作、关闭弹窗        |
+| <img src="/icons/useful/Copy.svg" />            | `Copy`            | 复制图标      | 复制内容到剪贴板         |
+| <img src="/icons/useful/Cut.svg" />             | `Cut`             | 剪切图标      | 剪切内容到剪贴板         |
+| <img src="/icons/useful/Delete.svg" />          | `Delete`          | 删除图标      | 删除项目、内容或文件       |
+| <img src="/icons/useful/Edit.svg" />            | `Edit`            | 编辑图标      | 编辑内容、修改信息        |
+| <img src="/icons/useful/ImmersionMore.svg" />   | `ImmersionMore`   | 沉浸式更多选项图标 | 沉浸模式下显示更多选项      |
+| <img src="/icons/useful/Info.svg" />            | `Info`            | 信息图标      | 显示详细信息、提示        |
+| <img src="/icons/useful/Like.svg" />            | `Like`            | 喜欢图标      | 点赞、收藏功能          |
+| <img src="/icons/useful/More.svg" />            | `More`            | 更多图标      | 显示更多选项或菜单        |
+| <img src="/icons/useful/Move.svg" />            | `Move`            | 移动图标      | 移动项目到其他位置        |
+| <img src="/icons/useful/NavigatorSwitch.svg" /> | `NavigatorSwitch` | 导航切换图标    | 切换导航视图           |
+| <img src="/icons/useful/New.svg" />             | `New`             | 新建图标      | 创建新内容、文件或项目      |
+| <img src="/icons/useful/Order.svg" />           | `Order`           | 排序图标      | 内容排序             |
+| <img src="/icons/useful/Paste.svg" />           | `Paste`           | 粘贴图标      | 从剪贴板粘贴内容         |
+| <img src="/icons/useful/Personal.svg" />        | `Personal`        | 个人/用户图标   | 个人信息、用户页面        |
+| <img src="/icons/useful/Play.svg" />            | `Play`            | 播放图标      | 播放媒体内容           |
+| <img src="/icons/useful/Reboot.svg" />          | `Reboot`          | 重启图标      | 重启应用或系统          |
+| <img src="/icons/useful/Refresh.svg" />         | `Refresh`         | 刷新图标      | 刷新内容或页面          |
+| <img src="/icons/useful/Remove.svg" />          | `Remove`          | 移除图标      | 移除项目（轻微删除）       |
+| <img src="/icons/useful/RemoveBlocklist.svg" /> | `RemoveBlocklist` | 移除黑名单图标   | 解除屏蔽             |
+| <img src="/icons/useful/RemoveSecret.svg" />    | `RemoveSecret`    | 移除加密内容图标  | 移除加密项            |
+| <img src="/icons/useful/Rename.svg" />          | `Rename`          | 重命名图标     | 重命名文件或项目         |
+| <img src="/icons/useful/Restore.svg" />         | `Restore`         | 恢复图标      | 恢复删除的内容          |
+| <img src="/icons/useful/Save.svg" />            | `Save`            | 保存图标      | 保存内容或更改          |
+| <img src="/icons/useful/Scan.svg" />            | `Scan`            | 扫描图标      | 扫描二维码等           |
+| <img src="/icons/useful/Search.svg" />          | `Search`          | 搜索图标      | 搜索内容             |
+| <img src="/icons/useful/SelectAll.svg" />       | `SelectAll`       | 全选图标      | 选择所有项目           |
+| <img src="/icons/useful/Settings.svg" />        | `Settings`        | 设置图标      | 应用或系统设置          |
+| <img src="/icons/useful/Share.svg" />           | `Share`           | 分享图标      | 分享内容到其他平台        |
+| <img src="/icons/useful/Stick.svg" />           | `Stick`           | 置顶图标      | 将内容置顶            |
+| <img src="/icons/useful/Unlike.svg" />          | `Unlike`          | 取消喜欢图标    | 取消点赞或收藏          |
+| <img src="/icons/useful/Unstick.svg" />         | `Unstick`         | 取消置顶图标    | 取消内容置顶           |
+| <img src="/icons/useful/Update.svg" />          | `Update`          | 更新图标      | 更新应用或内容          |
+
+### Other（其他图标）
+
+其他类别包含一些特定场景的图标。
+
+| 预览                                    | 图标名      | 描述        |
+|---------------------------------------|----------|-----------|
+| <img src="/icons/other/GitHub.svg" /> | `GitHub` | GitHub 图标 |

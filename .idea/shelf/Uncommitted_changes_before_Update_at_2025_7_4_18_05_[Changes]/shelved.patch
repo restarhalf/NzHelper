@@ -1,0 +1,38 @@
+Index: app/release/output-metadata.json
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{\r\n  \"version\": 3,\r\n  \"artifactType\": {\r\n    \"type\": \"APK\",\r\n    \"kind\": \"Directory\"\r\n  },\r\n  \"applicationId\": \"me.neko.nzhelper\",\r\n  \"variantName\": \"release\",\r\n  \"elements\": [\r\n    {\r\n      \"type\": \"SINGLE\",\r\n      \"filters\": [],\r\n      \"attributes\": [],\r\n      \"versionCode\": 29,\r\n      \"versionName\": \"0.0.9-alpha.r29.eb114e6\",\r\n      \"outputFile\": \"NzHelper_v0.0.9-alpha.r29.eb114e6.apk\"\r\n    }\r\n  ],\r\n  \"elementType\": \"File\",\r\n  \"baselineProfiles\": [\r\n    {\r\n      \"minApi\": 28,\r\n      \"maxApi\": 30,\r\n      \"baselineProfiles\": [\r\n        \"baselineProfiles/1/NzHelper_v0.0.9-alpha.r29.eb114e6.dm\"\r\n      ]\r\n    },\r\n    {\r\n      \"minApi\": 31,\r\n      \"maxApi\": 2147483647,\r\n      \"baselineProfiles\": [\r\n        \"baselineProfiles/0/NzHelper_v0.0.9-alpha.r29.eb114e6.dm\"\r\n      ]\r\n    }\r\n  ],\r\n  \"minSdkVersionForDexing\": 26\r\n}
+===================================================================
+diff --git a/app/release/output-metadata.json b/app/release/output-metadata.json
+--- a/app/release/output-metadata.json	(revision 7b0a7ec41344817c2ac19b2a351270ee1af8a77f)
++++ b/app/release/output-metadata.json	(date 1751623177181)
+@@ -11,9 +11,9 @@
+       "type": "SINGLE",
+       "filters": [],
+       "attributes": [],
+-      "versionCode": 29,
+-      "versionName": "0.0.9-alpha.r29.eb114e6",
+-      "outputFile": "NzHelper_v0.0.9-alpha.r29.eb114e6.apk"
++      "versionCode": 36,
++      "versionName": "0.0.9-alpha.r36.7b0a7ec",
++      "outputFile": "NzHelper_v0.0.9-alpha.r36.7b0a7ec.apk"
+     }
+   ],
+   "elementType": "File",
+@@ -22,14 +22,14 @@
+       "minApi": 28,
+       "maxApi": 30,
+       "baselineProfiles": [
+-        "baselineProfiles/1/NzHelper_v0.0.9-alpha.r29.eb114e6.dm"
++        "baselineProfiles/1/NzHelper_v0.0.9-alpha.r36.7b0a7ec.dm"
+       ]
+     },
+     {
+       "minApi": 31,
+       "maxApi": 2147483647,
+       "baselineProfiles": [
+-        "baselineProfiles/0/NzHelper_v0.0.9-alpha.r29.eb114e6.dm"
++        "baselineProfiles/0/NzHelper_v0.0.9-alpha.r36.7b0a7ec.dm"
+       ]
+     }
+   ],
