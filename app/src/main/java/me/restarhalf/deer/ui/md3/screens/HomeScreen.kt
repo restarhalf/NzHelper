@@ -140,7 +140,7 @@ fun HomeScreen() {
     Scaffold(
         topBar = {
             LargeFlexibleTopAppBar(
-                title = { Text(text = "牛子小助手") },
+                title = { Text(text = "今天🦌了吗") },
                 scrollBehavior = scrollBehavior
             )
         },

@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Card
@@ -55,7 +56,6 @@ fun DetailsDialog(
 
     val propIndex = propItems.indexOf(props).let { if (it >= 0) it else 0 }
     val moodIndex = moodItems.indexOf(mood).let { if (it >= 0) it else 0 }
-
     SuperDialog(
         title = "填写本次信息",
         show = showDialog,
@@ -181,4 +181,29 @@ fun DetailsDialog(
             }
         }
     }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun DetailsDialogPreview() {
+    DetailsDialog(
+        show = true,
+        remark = "",
+        onRemarkChange = {},
+        location = "",
+        onLocationChange = {},
+        watchedMovie = false,
+        onWatchedMovieChange = {},
+        climax = false,
+        onClimaxChange = {},
+        props = "手",
+        onPropsChange = {},
+        rating = 3.5f,
+        onRatingChange = {},
+        mood = "愉悦",
+        onMoodChange = {},
+        onConfirm = {},
+        onDismiss = {}
+    )
 }

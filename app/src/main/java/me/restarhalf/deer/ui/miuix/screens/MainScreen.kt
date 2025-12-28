@@ -8,14 +8,13 @@ import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -165,8 +164,9 @@ fun MainScreen() {
             }
         ) {
             composable(BottomNavItem.Home.route) { HomeScreen() }
+            composable(BottomNavItem.Rankings.route) { RankingsScreen(navController) }
             composable(BottomNavItem.Statistics.route) { StatisticsScreen() }
-            composable(BottomNavItem.History.route) { HistoryScreen() }
+            composable(BottomNavItem.Histories.route) { HistoryScreen() }
             composable(BottomNavItem.Settings.route) { SettingsScreen(navController) }
             composable("about") { AboutScreen(navController) }
             composable("open_source") { OpenSourceScreen(navController) }

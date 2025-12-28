@@ -22,7 +22,7 @@ sealed class BottomNavItem(
         icon = { painterResource(id = R.drawable.waterfall_chart_24px) }
     )
 
-    object History : BottomNavItem(
+    object Histories : BottomNavItem(
         route = "history",
         title = "历史",
         icon = { painterResource(id = R.drawable.history_24px) }
@@ -34,7 +34,13 @@ sealed class BottomNavItem(
         icon = { painterResource(id = R.drawable.settings_24px) }
     )
 
+    object Rank : BottomNavItem(
+        route = "rank",
+        title = "排名",
+        icon = { painterResource(id = R.drawable.rank_24px) }
+    )
+
     companion object {
-        val items = listOf(Home, Statistics, History, Settings)
+        val items = listOf(Home, Rank, Statistics, Histories, Settings)
     }
 }

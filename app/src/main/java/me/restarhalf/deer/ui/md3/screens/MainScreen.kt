@@ -169,7 +169,8 @@ fun MainScreen() {
             }
         ) {
             composable(BottomNavItem.Home.route) { HomeScreen() }
-            composable(BottomNavItem.History.route) { HistoryScreen() }
+            composable(BottomNavItem.Rank.route) { RankingsScreen(navController) }
+            composable(BottomNavItem.Histories.route) { HistoryScreen() }
             composable(BottomNavItem.Settings.route) { SettingsScreen(navController) }
             composable(BottomNavItem.Statistics.route) { StatisticsScreen() }
             composable("about") { AboutScreen(navController) }

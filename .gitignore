@@ -19,3 +19,6 @@ local.properties
 **/outputs/
 *.apk
 *.aab
+.env
+miuixapi/
+.idea/

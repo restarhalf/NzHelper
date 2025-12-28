@@ -41,6 +41,34 @@ android {
         versionCode = getGitCommitCount()
         versionName = "0.0.1-test.$commitCount.$gitHash"
 
+        val envFile = rootProject.file(".env")
+        fun readEnv(key: String): String? {
+            if (!envFile.exists()) return null
+            return envFile.readLines()
+                .firstOrNull { it.startsWith("$key=") }
+                ?.substringAfter('=')
+                ?.trim()
+                ?.takeIf { it.isNotBlank() }
+        }
+
+        fun escapeForBuildConfig(value: String): String =
+            value.replace("\\", "\\\\").replace("\"", "\\\"")
+
+        val supabaseUrl = readEnv("SUPABASE_URL")
+            ?: ""
+        val supabaseAnonKey = readEnv("SUPABASE_ANON_KEY")
+            ?: ""
+        val imgbbApiKey = readEnv("IMGBB_API_KEY")
+            ?: ""
+
+        buildConfigField("String", "SUPABASE_URL", "\"${escapeForBuildConfig(supabaseUrl)}\"")
+        buildConfigField(
+            "String",
+            "SUPABASE_ANON_KEY",
+            "\"${escapeForBuildConfig(supabaseAnonKey)}\""
+        )
+        buildConfigField("String", "IMGBB_API_KEY", "\"${escapeForBuildConfig(imgbbApiKey)}\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

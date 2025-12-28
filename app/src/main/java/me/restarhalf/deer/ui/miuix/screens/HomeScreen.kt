@@ -40,8 +40,8 @@ import androidx.core.content.ContextCompat
 import kotlinx.coroutines.launch
 import me.restarhalf.deer.data.Session
 import me.restarhalf.deer.data.SessionRepository
-import me.restarhalf.deer.ui.service.TimerService
 import me.restarhalf.deer.ui.miuix.details.DetailsDialog
+import me.restarhalf.deer.ui.service.TimerService
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
 import top.yukonga.miuix.kmp.basic.Icon
 import top.yukonga.miuix.kmp.basic.IconButton
@@ -116,7 +116,7 @@ fun HomeScreen() {
         popupHost = { },
         topBar = {
             TopAppBar(
-                title = "牛子小助手"
+                title = "今天🦌了吗"
             )
         }
     ) { paddingValues ->

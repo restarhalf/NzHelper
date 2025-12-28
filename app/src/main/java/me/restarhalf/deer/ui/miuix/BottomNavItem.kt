@@ -1,13 +1,10 @@
 package me.restarhalf.deer.ui.miuix
 
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
-import me.restarhalf.deer.R
+import me.restarhalf.deer.ui.miuix.icons.custom.Rank
+import me.restarhalf.deer.ui.miuix.icons.custom.Stat
+import me.restarhalf.deer.ui.miuix.icons.custom.Timer
 import top.yukonga.miuix.kmp.icon.MiuixIcons
-import top.yukonga.miuix.kmp.icon.icons.useful.Order
-import top.yukonga.miuix.kmp.icon.icons.useful.Play
 import top.yukonga.miuix.kmp.icon.icons.useful.Restore
 import top.yukonga.miuix.kmp.icon.icons.useful.Settings
 
@@ -19,16 +16,16 @@ sealed class BottomNavItem(
     object Home : BottomNavItem(
         route = "home",
         title = "计时",
-        icon = MiuixIcons.Useful.Play
+        icon = Timer
     )
 
     object Statistics : BottomNavItem(
         route = "statistics",
         title = "统计",
-        icon = MiuixIcons.Useful.Order
+        icon = Stat
     )
 
-    object History : BottomNavItem(
+    object Histories : BottomNavItem(
         route = "history",
         title = "历史",
         icon = MiuixIcons.Useful.Restore
@@ -40,7 +37,13 @@ sealed class BottomNavItem(
         icon = MiuixIcons.Useful.Settings
     )
 
+    object Rankings : BottomNavItem(
+        route = "rankings",
+        title = "排行榜",
+        icon = Rank
+    )
+
     companion object {
-        val items = listOf(Home, Statistics, History, Settings)
+        val items = listOf(Home, Rankings, Statistics, Histories, Settings)
     }
 }
