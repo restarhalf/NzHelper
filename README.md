@@ -6,7 +6,7 @@
 
 [![license](https://img.shields.io/github/license/restarhalf/NzHelper.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
 [![Stars](https://img.shields.io/github/stars/restarhalf/NzHelper?label=stars)](https://github.com/restarhalf/NzHelper)
-<a href="https://github.com/restarhal/NzHelper/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/restarhalf/NzHelper/total?label=Downloads"></a>
+<a href="https://github.com/restarhalf/NzHelper/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/restarhalf/NzHelper/total?label=Downloads"></a>
 [![GitHub Release](https://img.shields.io/github/v/release/restarhalf/NzHelper)](https://github.com/restarhalf/NzHelper/releases)
 <a href="https://github.com/restarhalf/NzHelper/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/restarhalf/NzHelper"></a>
 
