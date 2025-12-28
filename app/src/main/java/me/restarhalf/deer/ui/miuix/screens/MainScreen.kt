@@ -139,8 +139,10 @@ fun MainScreen() {
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding),
             enterTransition = {
-                val initialIndex = BottomNavItem.items.indexOfFirst { it.route == initialState.destination.route }
-                val targetIndex = BottomNavItem.items.indexOfFirst { it.route == targetState.destination.route }
+                val initialIndex =
+                    BottomNavItem.items.indexOfFirst { it.route == initialState.destination.route }
+                val targetIndex =
+                    BottomNavItem.items.indexOfFirst { it.route == targetState.destination.route }
                 val direction = when {
                     initialIndex >= 0 && targetIndex >= 0 -> if (targetIndex > initialIndex) SlideDirection.Left else SlideDirection.Right
                     else -> SlideDirection.Left
@@ -148,8 +150,10 @@ fun MainScreen() {
                 slideIntoContainer(direction, tween(260)) + fadeIn(tween(260))
             },
             exitTransition = {
-                val initialIndex = BottomNavItem.items.indexOfFirst { it.route == initialState.destination.route }
-                val targetIndex = BottomNavItem.items.indexOfFirst { it.route == targetState.destination.route }
+                val initialIndex =
+                    BottomNavItem.items.indexOfFirst { it.route == initialState.destination.route }
+                val targetIndex =
+                    BottomNavItem.items.indexOfFirst { it.route == targetState.destination.route }
                 val direction = when {
                     initialIndex >= 0 && targetIndex >= 0 -> if (targetIndex > initialIndex) SlideDirection.Left else SlideDirection.Right
                     else -> SlideDirection.Left
@@ -177,8 +181,8 @@ fun MainScreen() {
                 title = "检测到新版本",
                 summary =
                     "当前版本：${BuildConfig.VERSION_NAME}\n" +
-                        "最新版本：$latestTag\n\n" +
-                        "针对你的牛牛进行了一些优化，是否前往 GitHub 下载？",
+                            "最新版本：$latestTag\n\n" +
+                            "针对你的牛牛进行了一些优化，是否前往 GitHub 下载？",
                 show = showUpdateDialog,
                 onDismissRequest = { showUpdateDialog.value = false }
             ) {

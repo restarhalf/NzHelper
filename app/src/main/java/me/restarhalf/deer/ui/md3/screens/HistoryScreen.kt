@@ -102,7 +102,8 @@ fun HistoryScreen() {
     var showClearDialog by remember { mutableStateOf(false) }
     var sessionToDelete by remember { mutableStateOf<Session?>(null) }
     var sessionToView by remember { mutableStateOf<Session?>(null) }
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     // 导出 Launcher
     val exportLauncher = rememberLauncherForActivityResult(

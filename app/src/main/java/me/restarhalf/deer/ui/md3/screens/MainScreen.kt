@@ -144,8 +144,10 @@ fun MainScreen() {
             startDestination = BottomNavItem.Home.route,
             modifier = Modifier.padding(innerPadding),
             enterTransition = {
-                val initialIndex = BottomNavItem.items.indexOfFirst { it.route == initialState.destination.route }
-                val targetIndex = BottomNavItem.items.indexOfFirst { it.route == targetState.destination.route }
+                val initialIndex =
+                    BottomNavItem.items.indexOfFirst { it.route == initialState.destination.route }
+                val targetIndex =
+                    BottomNavItem.items.indexOfFirst { it.route == targetState.destination.route }
                 val direction = when {
                     initialIndex >= 0 && targetIndex >= 0 -> if (targetIndex > initialIndex) SlideDirection.Left else SlideDirection.Right
                     else -> SlideDirection.Left
@@ -153,8 +155,10 @@ fun MainScreen() {
                 slideIntoContainer(direction, tween(260)) + fadeIn(tween(260))
             },
             exitTransition = {
-                val initialIndex = BottomNavItem.items.indexOfFirst { it.route == initialState.destination.route }
-                val targetIndex = BottomNavItem.items.indexOfFirst { it.route == targetState.destination.route }
+                val initialIndex =
+                    BottomNavItem.items.indexOfFirst { it.route == initialState.destination.route }
+                val targetIndex =
+                    BottomNavItem.items.indexOfFirst { it.route == targetState.destination.route }
                 val direction = when {
                     initialIndex >= 0 && targetIndex >= 0 -> if (targetIndex > initialIndex) SlideDirection.Left else SlideDirection.Right
                     else -> SlideDirection.Left

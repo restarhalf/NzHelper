@@ -68,14 +68,16 @@ import me.restarhalf.deer.ui.md3.details.DetailsDialog
 import me.restarhalf.deer.ui.service.TimerService
 import java.time.LocalDateTime
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
     ExperimentalMaterial3ExpressiveApi::class
 )
 @Composable
 fun HomeScreen() {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     // 绑定 Service
     val serviceIntent = remember { Intent(context, TimerService::class.java) }
@@ -206,7 +208,8 @@ fun HomeScreen() {
                             IconButton(
                                 onClick = {
                                     if (elapsedSeconds > 0) showConfirmDialog = true
-                                    else Toast.makeText(context, "计时尚未开始", Toast.LENGTH_SHORT).show()
+                                    else Toast.makeText(context, "计时尚未开始", Toast.LENGTH_SHORT)
+                                        .show()
                                 },
                                 modifier = Modifier
                                     .size(64.dp)

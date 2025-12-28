@@ -10,7 +10,7 @@ object SupabaseSessionRepository {
     private const val KEY_EXPIRES_AT = "expires_at"
     private const val KEY_USER_ID = "user_id"
     private const val KEY_EMAIL = "email"
-    private const val KEY_NICKNAME="nickname"
+    private const val KEY_NICKNAME = "nickname"
     private const val KEY_AVATAR_URL = "avatar_url"
 
     fun load(context: Context): SupabaseSession? {

@@ -1,22 +1,20 @@
 package me.restarhalf.deer.ui.service
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.Service
 import android.content.Intent
-import android.os.IBinder
-import android.os.Binder
-import android.os.Handler
-import android.os.Looper
-import android.app.Notification
-import android.annotation.SuppressLint
 import android.content.pm.ServiceInfo
+import android.os.Binder
 import android.os.Build
+import android.os.Handler
+import android.os.IBinder
+import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -57,7 +55,7 @@ class TimerService : Service() {
         when (intent?.action) {
             ACTION_START -> startTimer()
             ACTION_PAUSE -> pauseTimer()
-            ACTION_STOP  -> stopTimer()
+            ACTION_STOP -> stopTimer()
         }
         return START_STICKY
     }
@@ -119,7 +117,7 @@ class TimerService : Service() {
     companion object {
         const val ACTION_START = "me.restarhalf.deer.ACTION_START"
         const val ACTION_PAUSE = "me.restarhalf.deer.ACTION_PAUSE"
-        const val ACTION_STOP  = "me.restarhalf.deer.ACTION_STOP"
+        const val ACTION_STOP = "me.restarhalf.deer.ACTION_STOP"
         const val NOTIF_ID = 1001
     }
 

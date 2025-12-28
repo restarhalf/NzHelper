@@ -137,46 +137,46 @@ fun AboutScreen(
             }
 
             item {
-                Card{
-                BasicComponent(
-                    leftAction = {
-                        Icon(
-                            modifier = Modifier.padding(end = 16.dp),
-                            imageVector = MiuixIcons.Other.GitHub,
-                            contentDescription = "Github",
-                            tint = MiuixTheme.colorScheme.onBackground
-                        )
-                    },
-                    title = "仓库",
-                    summary = "在GitHub仓库查看源码",
-                    onClick = {
-                        val intent = Intent(
-                            Intent.ACTION_VIEW,
-                            "https://github.com/restarhalf/NzHelper".toUri()
-                        )
-                        context.startActivity(intent)
-                    }
-                )
+                Card {
+                    BasicComponent(
+                        leftAction = {
+                            Icon(
+                                modifier = Modifier.padding(end = 16.dp),
+                                imageVector = MiuixIcons.Other.GitHub,
+                                contentDescription = "Github",
+                                tint = MiuixTheme.colorScheme.onBackground
+                            )
+                        },
+                        title = "仓库",
+                        summary = "在GitHub仓库查看源码",
+                        onClick = {
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                "https://github.com/restarhalf/NzHelper".toUri()
+                            )
+                            context.startActivity(intent)
+                        }
+                    )
                 }
             }
-            item{ Spacer(modifier = Modifier.height(12.dp)) }
+            item { Spacer(modifier = Modifier.height(12.dp)) }
             item {
-                Card{ 
-                BasicComponent(
-                    leftAction = {
-                        Icon(
-                            modifier = Modifier.padding(end = 16.dp),
-                            painter = painterResource(id = R.drawable.source_code_24px),
-                            contentDescription = "Code",
-                            tint = MiuixTheme.colorScheme.onBackground
-                        )
-                    },
-                    title = "开放源代码",
-                    summary = "查看应用所使用的开源库及其许可证",
-                    onClick = { navController.navigate("open_source") }
-                )
+                Card {
+                    BasicComponent(
+                        leftAction = {
+                            Icon(
+                                modifier = Modifier.padding(end = 16.dp),
+                                painter = painterResource(id = R.drawable.source_code_24px),
+                                contentDescription = "Code",
+                                tint = MiuixTheme.colorScheme.onBackground
+                            )
+                        },
+                        title = "开放源代码",
+                        summary = "查看应用所使用的开源库及其许可证",
+                        onClick = { navController.navigate("open_source") }
+                    )
+                }
             }
-        }
         }
     }
 }

@@ -115,7 +115,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    implementation("top.yukonga.miuix.kmp","miuix-android","0.7.2")
+    implementation("top.yukonga.miuix.kmp", "miuix-android", "0.7.2")
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)

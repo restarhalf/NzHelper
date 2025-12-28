@@ -181,15 +181,15 @@ fun ProfileDialog(
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 TextButton(
-                    text="更改邮箱",
-                    onClick={
+                    text = "更改邮箱",
+                    onClick = {
                         //TODO 更改邮箱逻辑
                     },
                     modifier = Modifier.weight(1f)
                 )
                 TextButton(
-                    text="重置密码",
-                    onClick={
+                    text = "重置密码",
+                    onClick = {
                         //TODO 更改密码逻辑
                     },
                     modifier = Modifier.weight(1f)

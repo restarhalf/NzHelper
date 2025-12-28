@@ -6,10 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ElevatedCard
@@ -49,7 +49,8 @@ fun RankingsScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     val session by SupabaseAuthRepository.session.collectAsState()
 
@@ -121,7 +122,9 @@ fun RankingsScreen(
                                         errorText = null
                                         scope.launch {
                                             try {
-                                                SupabaseLeaderboardRepository.upsertMyStatsFromLocal(context)
+                                                SupabaseLeaderboardRepository.upsertMyStatsFromLocal(
+                                                    context
+                                                )
                                                 refresh()
                                             } catch (e: SupabaseApiException) {
                                                 errorText = e.message

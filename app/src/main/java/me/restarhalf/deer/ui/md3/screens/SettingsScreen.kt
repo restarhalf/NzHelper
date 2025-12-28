@@ -63,7 +63,8 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val prefs by ThemeRepository.themePreferences.collectAsState()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    val scrollBehavior =
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
 
     val scope = rememberCoroutineScope()
     val session by SupabaseAuthRepository.session.collectAsState()
@@ -75,29 +76,29 @@ fun SettingsScreen(
     var showProfileDialog by remember { mutableStateOf(false) }
 
     val md3Selected = prefs.uiStyle == UiStyle.MD3
-     val miuixSelected = prefs.uiStyle == UiStyle.MIUIX
+    val miuixSelected = prefs.uiStyle == UiStyle.MIUIX
 
-     val md3ContainerColor by animateColorAsState(
-         targetValue = if (md3Selected) {
-             MaterialTheme.colorScheme.primaryContainer
-         } else {
-             MaterialTheme.colorScheme.surfaceVariant
-         }
-     )
-     val miuixContainerColor by animateColorAsState(
-         targetValue = if (miuixSelected) {
-             MaterialTheme.colorScheme.primaryContainer
-         } else {
-             MaterialTheme.colorScheme.surfaceVariant
-         }
-     )
+    val md3ContainerColor by animateColorAsState(
+        targetValue = if (md3Selected) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceVariant
+        }
+    )
+    val miuixContainerColor by animateColorAsState(
+        targetValue = if (miuixSelected) {
+            MaterialTheme.colorScheme.primaryContainer
+        } else {
+            MaterialTheme.colorScheme.surfaceVariant
+        }
+    )
 
-     val md3DotColor by animateColorAsState(
-         targetValue = if (md3Selected) MaterialTheme.colorScheme.primary else Color.Transparent
-     )
-     val miuixDotColor by animateColorAsState(
-         targetValue = if (miuixSelected) MaterialTheme.colorScheme.primary else Color.Transparent
-     )
+    val md3DotColor by animateColorAsState(
+        targetValue = if (md3Selected) MaterialTheme.colorScheme.primary else Color.Transparent
+    )
+    val miuixDotColor by animateColorAsState(
+        targetValue = if (miuixSelected) MaterialTheme.colorScheme.primary else Color.Transparent
+    )
 
     Scaffold(
         topBar = {
@@ -277,7 +278,10 @@ fun SettingsScreen(
                         )
                     },
                     headlineContent = {
-                        Text(text = "Material Design 3", style = MaterialTheme.typography.titleMedium)
+                        Text(
+                            text = "Material Design 3",
+                            style = MaterialTheme.typography.titleMedium
+                        )
                     },
                     supportingContent = {
                         Text(text = "Material Design 3 界面")

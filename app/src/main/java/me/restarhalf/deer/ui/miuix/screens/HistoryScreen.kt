@@ -167,8 +167,8 @@ fun HistoryScreen() {
                         putString("sessions", jsonStr)
                     }
                 }
-            }
         }
+    }
 
 
     LaunchedEffect(Unit) {
@@ -379,10 +379,22 @@ fun HistoryScreen() {
                         verticalArrangement = Arrangement.spacedBy(6.dp)
                     ) {
                         val pat = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-                        Text("开始时间：" + s.timestamp.format(pat), style = MiuixTheme.textStyles.body1)
-                        Text("持续时长：" + formatTime(s.duration), style = MiuixTheme.textStyles.body1)
-                        Text("备注：" + s.remark.ifEmpty { "无" }, style = MiuixTheme.textStyles.body1)
-                        Text("地点：" + s.location.ifEmpty { "无" }, style = MiuixTheme.textStyles.body1)
+                        Text(
+                            "开始时间：" + s.timestamp.format(pat),
+                            style = MiuixTheme.textStyles.body1
+                        )
+                        Text(
+                            "持续时长：" + formatTime(s.duration),
+                            style = MiuixTheme.textStyles.body1
+                        )
+                        Text(
+                            "备注：" + s.remark.ifEmpty { "无" },
+                            style = MiuixTheme.textStyles.body1
+                        )
+                        Text(
+                            "地点：" + s.location.ifEmpty { "无" },
+                            style = MiuixTheme.textStyles.body1
+                        )
                         Text(
                             "是否观看小电影：" + if (s.watchedMovie) "是" else "否",
                             style = MiuixTheme.textStyles.body1
@@ -391,7 +403,10 @@ fun HistoryScreen() {
                             "发射：" + if (s.climax) "是" else "否",
                             style = MiuixTheme.textStyles.body1
                         )
-                        Text("道具：" + s.props.ifEmpty { "无" }, style = MiuixTheme.textStyles.body1)
+                        Text(
+                            "道具：" + s.props.ifEmpty { "无" },
+                            style = MiuixTheme.textStyles.body1
+                        )
                         Text(
                             "评分：" + "%.1f".format(s.rating) + " / 5.0",
                             style = MiuixTheme.textStyles.body1

@@ -60,8 +60,9 @@ object ThemeRepository {
         val uiStyle = runCatching { UiStyle.valueOf(uiStyleStr ?: UiStyle.MD3.name) }
             .getOrDefault(UiStyle.MD3)
 
-        val miuixMode = runCatching { ColorSchemeMode.valueOf(miuixModeStr ?: ColorSchemeMode.System.name) }
-            .getOrDefault(ColorSchemeMode.System)
+        val miuixMode =
+            runCatching { ColorSchemeMode.valueOf(miuixModeStr ?: ColorSchemeMode.System.name) }
+                .getOrDefault(ColorSchemeMode.System)
 
         return ThemePreferences(
             uiStyle = uiStyle,
