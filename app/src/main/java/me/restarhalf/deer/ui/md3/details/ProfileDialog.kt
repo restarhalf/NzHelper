@@ -48,6 +48,9 @@ fun ProfileDialog(
     var errorText by remember { mutableStateOf<String?>(null) }
     var nicknameText by remember(session?.nickname) { mutableStateOf(session?.nickname.orEmpty()) }
 
+    var showEmailChangeDialog by remember { mutableStateOf(false) }
+    var showResetPasswordDialog by remember { mutableStateOf(false) }
+
     val pickAvatarLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -71,6 +74,16 @@ fun ProfileDialog(
             }
         }
     }
+
+    EmailChangeOtpDialog(
+        show = showEmailChangeDialog,
+        onDismiss = { showEmailChangeDialog = false }
+    )
+
+    ResetPasswordOtpDialog(
+        show = showResetPasswordDialog,
+        onDismiss = { showResetPasswordDialog = false }
+    )
 
     AlertDialog(
         onDismissRequest = {
@@ -154,7 +167,7 @@ fun ProfileDialog(
                     TextButton(
                         onClick = {
                             if (busy || session == null) return@TextButton
-                            //TODO 更改邮箱逻辑
+                            showEmailChangeDialog = true
                         },
                         enabled = !busy && session != null
                     ) {
@@ -163,7 +176,7 @@ fun ProfileDialog(
                     TextButton(
                         onClick = {
                             if (busy || session == null) return@TextButton
-                            //TODO 重置密码逻辑
+                            showResetPasswordDialog = true
                         },
                         enabled = !busy && session != null
                     ) {

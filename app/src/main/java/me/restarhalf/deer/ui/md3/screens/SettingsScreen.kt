@@ -54,6 +54,7 @@ import me.restarhalf.deer.data.supabase.SupabaseAuthRepository
 import me.restarhalf.deer.ui.md3.details.LoginDialog
 import me.restarhalf.deer.ui.md3.details.ProfileDialog
 import me.restarhalf.deer.ui.md3.details.SignupDialog
+import me.restarhalf.deer.ui.md3.details.SignupVerifyDialog
 import me.restarhalf.deer.ui.util.AvatarCircle
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
@@ -73,7 +74,10 @@ fun SettingsScreen(
 
     var showLoginDialog by remember { mutableStateOf(false) }
     var showSignupDialog by remember { mutableStateOf(false) }
+    var showSignupVerifyDialog by remember { mutableStateOf(false) }
     var showProfileDialog by remember { mutableStateOf(false) }
+
+    var signupVerifyEmail by remember { mutableStateOf("") }
 
     val md3Selected = prefs.uiStyle == UiStyle.MD3
     val miuixSelected = prefs.uiStyle == UiStyle.MIUIX
@@ -126,6 +130,44 @@ fun SettingsScreen(
                     }
                 }
             },
+            onSendOtp = { email ->
+                authError = null
+                authBusy = true
+                scope.launch {
+                    try {
+                        SupabaseAuthRepository.sendEmailOtp(
+                            email = email.trim(),
+                            createUser = false
+                        )
+                        authError = "验证码已发送"
+                    } catch (e: SupabaseApiException) {
+                        authError = e.message
+                    } catch (e: Exception) {
+                        authError = e.message ?: "发送验证码失败"
+                    } finally {
+                        authBusy = false
+                    }
+                }
+            },
+            onVerifyOtp = { email, token ->
+                authError = null
+                authBusy = true
+                scope.launch {
+                    try {
+                        SupabaseAuthRepository.verifyEmailOtp(
+                            context = context,
+                            email = email.trim(),
+                            token = token.trim()
+                        )
+                    } catch (e: SupabaseApiException) {
+                        authError = e.message
+                    } catch (e: Exception) {
+                        authError = e.message ?: "验证码登录失败"
+                    } finally {
+                        authBusy = false
+                    }
+                }
+            },
             onDismiss = { showLoginDialog = false },
             onSignup = {
                 showLoginDialog = false
@@ -147,7 +189,9 @@ fun SettingsScreen(
                             password = password
                         )
                         if (newSession == null) {
-                            authError = "注册成功，请前往邮箱验证后再登录"
+                            signupVerifyEmail = email.trim()
+                            showSignupVerifyDialog = true
+                            authError = "验证码已发送"
                         }
                     } catch (e: SupabaseApiException) {
                         authError = e.message
@@ -163,6 +207,49 @@ fun SettingsScreen(
                 showSignupDialog = false
                 showLoginDialog = true
             }
+        )
+
+        SignupVerifyDialog(
+            show = showSignupVerifyDialog,
+            initialEmail = signupVerifyEmail,
+            onResend = { email ->
+                authError = null
+                authBusy = true
+                scope.launch {
+                    try {
+                        SupabaseAuthRepository.resendSignupEmail(email.trim())
+                        authError = "验证码已发送"
+                    } catch (e: SupabaseApiException) {
+                        authError = e.message
+                    } catch (e: Exception) {
+                        authError = e.message ?: "发送验证码失败"
+                    } finally {
+                        authBusy = false
+                    }
+                }
+            },
+            onVerify = { email, token ->
+                authError = null
+                authBusy = true
+                scope.launch {
+                    try {
+                        SupabaseAuthRepository.verifyEmailOtp(
+                            context = context,
+                            email = email.trim(),
+                            token = token.trim(),
+                            type = "signup"
+                        )
+                        showSignupVerifyDialog = false
+                    } catch (e: SupabaseApiException) {
+                        authError = e.message
+                    } catch (e: Exception) {
+                        authError = e.message ?: "邮箱验证失败"
+                    } finally {
+                        authBusy = false
+                    }
+                }
+            },
+            onDismiss = { showSignupVerifyDialog = false }
         )
 
         ProfileDialog(

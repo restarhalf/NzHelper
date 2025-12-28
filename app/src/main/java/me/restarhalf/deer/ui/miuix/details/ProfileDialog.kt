@@ -54,6 +54,9 @@ fun ProfileDialog(
     var errorText by remember { mutableStateOf<String?>(null) }
     var nicknameText by remember(session?.nickname) { mutableStateOf(session?.nickname.orEmpty()) }
 
+    val showEmailChangeDialog = remember { mutableStateOf(false) }
+    val showResetPasswordDialog = remember { mutableStateOf(false) }
+
     val pickAvatarLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
@@ -77,6 +80,16 @@ fun ProfileDialog(
             }
         }
     }
+
+    EmailChangeOtpDialog(
+        show = showEmailChangeDialog,
+        onDismiss = { showEmailChangeDialog.value = false }
+    )
+
+    ResetPasswordOtpDialog(
+        show = showResetPasswordDialog,
+        onDismiss = { showResetPasswordDialog.value = false }
+    )
 
     SuperDialog(
         title = "个人资料",
@@ -183,14 +196,17 @@ fun ProfileDialog(
                 TextButton(
                     text = "更改邮箱",
                     onClick = {
-                        //TODO 更改邮箱逻辑
+                        if (busy || session == null) return@TextButton
+                        showEmailChangeDialog.value = true
                     },
                     modifier = Modifier.weight(1f)
                 )
+                Spacer( modifier = Modifier.size(16.dp))
                 TextButton(
                     text = "重置密码",
                     onClick = {
-                        //TODO 更改密码逻辑
+                        if (busy || session == null) return@TextButton
+                        showResetPasswordDialog.value = true
                     },
                     modifier = Modifier.weight(1f)
                 )

@@ -21,14 +21,14 @@ class ImgbbApiException(
 ) : Exception(message)
 
 data class ImgbbUploadResponse(
-    @Json(name = "data") val data: ImgbbUploadData?,
-    @Json(name = "success") val success: Boolean?,
-    @Json(name = "status") val status: Int?
+    @param:Json(name = "data") val data: ImgbbUploadData?,
+    @param:Json(name = "success") val success: Boolean?,
+    @param:Json(name = "status") val status: Int?
 )
 
 data class ImgbbUploadData(
-    @Json(name = "url") val url: String?,
-    @Json(name = "display_url") val displayUrl: String?
+    @param:Json(name = "url") val url: String?,
+    @param:Json(name = "display_url") val displayUrl: String?
 )
 
 object ImgbbRepository {

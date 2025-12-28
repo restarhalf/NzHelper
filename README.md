@@ -1,14 +1,14 @@
 <div align="center">
 
-![NzHelper](https://socialify.git.ci/bug-bit/NzHelper/image?description=1&font=Inter&forks=1&language=1&name=1&owner=1&stargazers=1&theme=Auto)
+![NzHelper](https://socialify.git.ci/restarhalf/NzHelper/image?description=1&font=Inter&forks=1&language=1&name=1&owner=1&stargazers=1&theme=Auto)
 
 # NzHelper
 
-[![license](https://img.shields.io/github/license/bug-bit/NzHelper.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
-[![Stars](https://img.shields.io/github/stars/bug-bit/NzHelper?label=stars)](https://github.com/bug-bit/NzHelper)
-<a href="https://github.com/bug-bit/NzHelper/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/bug-bit/NzHelper/total?label=Downloads"></a>
-[![GitHub Release](https://img.shields.io/github/v/release/bug-bit/NzHelper)](https://github.com/bug-bit/NzHelper/releases)
-<a href="https://github.com/bug-bit/NzHelper/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/bug-bit/NzHelper"></a>
+[![license](https://img.shields.io/github/license/restarhalf/NzHelper.svg)](https://www.gnu.org/licenses/gpl-3.0.html)
+[![Stars](https://img.shields.io/github/stars/restarhalf/NzHelper?label=stars)](https://github.com/restarhalf/NzHelper)
+<a href="https://github.com/restarhal/NzHelper/releases"><img alt="GitHub all releases" src="https://img.shields.io/github/downloads/restarhalf/NzHelper/total?label=Downloads"></a>
+[![GitHub Release](https://img.shields.io/github/v/release/restarhalf/NzHelper)](https://github.com/restarhalf/NzHelper/releases)
+<a href="https://github.com/restarhalf/NzHelper/issues"><img alt="GitHub issues" src="https://img.shields.io/github/issues/restarhalf/NzHelper"></a>
 
 一个简单、高效、易用的打飞机记录工具，帮助你科学管理✈️生活
 
@@ -23,6 +23,8 @@
 
 - 本项目参考了以下开源项目：
 - [DickHelper](https://github.com/zzzdajb/DickHelper)
+- [NzHelper](https://github.com/bug-bit/NzHelper)
+- [miuix](https://github.com/compose-miuix-ui/miuix)
 
 ## 贡献
 
@@ -32,7 +34,7 @@
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=bug-bit/NzHelper&type=Timeline)](https://star-history.com/#bug-bit/NzHelper&Timeline)
+[![Star History Chart](https://api.star-history.com/svg?repos=restarhalf/NzHelper&type=Timeline)](https://star-history.com/#restarhalf/NzHelper&Timeline)
 
 ## 许可协议
 

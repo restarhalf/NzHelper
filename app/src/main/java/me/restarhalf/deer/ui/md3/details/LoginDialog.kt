@@ -1,9 +1,12 @@
 package me.restarhalf.deer.ui.md3.details
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.OutlinedTextField
@@ -23,6 +26,8 @@ import androidx.compose.ui.unit.dp
 fun LoginDialog(
     show: Boolean,
     onConfirm: (email: String, password: String) -> Unit,
+    onSendOtp: (email: String) -> Unit,
+    onVerifyOtp: (email: String, token: String) -> Unit,
     onDismiss: () -> Unit,
     onSignup: () -> Unit
 ) {
@@ -30,6 +35,8 @@ fun LoginDialog(
 
     var emailText by remember { mutableStateOf("") }
     var passwordText by remember { mutableStateOf("") }
+    var tokenText by remember { mutableStateOf("") }
+    var useOtp by remember { mutableStateOf(false) }
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -47,37 +54,86 @@ fun LoginDialog(
                     modifier = Modifier.fillMaxWidth()
                 )
                 Spacer(modifier = Modifier.height(12.dp))
-                OutlinedTextField(
-                    value = passwordText,
-                    onValueChange = { passwordText = it },
-                    label = { Text("密码") },
-                    singleLine = true,
-                    visualTransformation = PasswordVisualTransformation(),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Password
-                    ),
-                    modifier = Modifier.fillMaxWidth()
-                )
+                if (useOtp) {
+                    OutlinedTextField(
+                        value = tokenText,
+                        onValueChange = { tokenText = it },
+                        label = { Text("验证码") },
+                        singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                } else {
+                    OutlinedTextField(
+                        value = passwordText,
+                        onValueChange = { passwordText = it },
+                        label = { Text("密码") },
+                        singleLine = true,
+                        visualTransformation = PasswordVisualTransformation(),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Password
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
             }
         },
         confirmButton = {
-            TextButton(
-                onClick = {
-                    onDismiss()
-                    onConfirm(emailText, passwordText)
+            if (useOtp) {
+                Row(horizontalArrangement = Arrangement.End) {
+                    TextButton(
+                        onClick = {
+                            onSendOtp(emailText)
+                        }
+                    ) {
+                        Text("发送验证码")
+                    }
+                    Spacer(modifier = Modifier.width(8.dp))
+                    TextButton(
+                        onClick = {
+                            onDismiss()
+                            onVerifyOtp(emailText, tokenText)
+                        }
+                    ) {
+                        Text("登录")
+                    }
                 }
-            ) {
-                Text("登录")
+            } else {
+                TextButton(
+                    onClick = {
+                        onDismiss()
+                        onConfirm(emailText, passwordText)
+                    }
+                ) {
+                    Text("登录")
+                }
             }
         },
         dismissButton = {
-            TextButton(
-                onClick = {
-                    onDismiss()
-                    onSignup()
+            Row(horizontalArrangement = Arrangement.End) {
+                TextButton(
+                    onClick = {
+                        useOtp = !useOtp
+                        if (!useOtp) {
+                            tokenText = ""
+                        } else {
+                            passwordText = ""
+                        }
+                    }
+                ) {
+                    Text(if (useOtp) "密码登录" else "验证码登录")
                 }
-            ) {
-                Text("注册")
+                Spacer(modifier = Modifier.width(8.dp))
+                TextButton(
+                    onClick = {
+                        onDismiss()
+                        onSignup()
+                    }
+                ) {
+                    Text("注册")
+                }
             }
         }
     )

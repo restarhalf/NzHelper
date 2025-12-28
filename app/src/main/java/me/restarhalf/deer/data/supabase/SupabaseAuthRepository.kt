@@ -15,6 +15,8 @@ object SupabaseAuthRepository {
     private val authAdapter = SupabaseHttp.moshi.adapter(SupabaseAuthResponse::class.java)
     private val emailPasswordAdapter =
         SupabaseHttp.moshi.adapter(SupabaseEmailPasswordRequest::class.java)
+    private val emailOtpAdapter = SupabaseHttp.moshi.adapter(SupabaseEmailOtpRequest::class.java)
+    private val verifyOtpAdapter = SupabaseHttp.moshi.adapter(SupabaseVerifyOtpRequest::class.java)
     private val signUpAdapter = SupabaseHttp.moshi.adapter(SupabaseSignUpRequest::class.java)
     private val updateUserMapAdapter = SupabaseHttp.moshi.adapter<Map<String, Any?>>(
         Types.newParameterizedType(
@@ -33,6 +35,184 @@ object SupabaseAuthRepository {
     fun signOut(context: Context) {
         SupabaseSessionRepository.clear(context)
         _session.value = null
+    }
+
+    suspend fun sendEmailOtp(
+        email: String,
+        createUser: Boolean? = null
+    ) {
+        val cleaned = email.trim().takeIf { it.isNotBlank() }
+            ?: throw IllegalArgumentException("Email is blank")
+
+        val url = ("${SupabaseConfig.authBaseUrl}/otp").toHttpUrl()
+        val payload = emailOtpAdapter.toJson(
+            SupabaseEmailOtpRequest(
+                email = cleaned,
+                createUser = createUser
+            )
+        )
+        val request = SupabaseHttp.baseRequestBuilder(url)
+            .post(payload.toRequestBody(SupabaseHttp.jsonMediaType))
+            .build()
+
+        SupabaseHttp.execute(request)
+    }
+
+    suspend fun verifyEmailOtp(
+        context: Context,
+        email: String,
+        token: String,
+        type: String = "email"
+    ): SupabaseSession {
+        val cleanedEmail = email.trim().takeIf { it.isNotBlank() }
+            ?: throw IllegalArgumentException("Email is blank")
+        val cleanedToken = token.trim().takeIf { it.isNotBlank() }
+            ?: throw IllegalArgumentException("Token is blank")
+
+        val url = ("${SupabaseConfig.authBaseUrl}/verify").toHttpUrl()
+        val payload = verifyOtpAdapter.toJson(
+            SupabaseVerifyOtpRequest(
+                type = type,
+                email = cleanedEmail,
+                token = cleanedToken
+            )
+        )
+        val request = SupabaseHttp.baseRequestBuilder(url)
+            .post(payload.toRequestBody(SupabaseHttp.jsonMediaType))
+            .build()
+
+        val body = SupabaseHttp.execute(request)
+        val resp = authAdapter.fromJson(body)
+            ?: throw SupabaseApiException(500, body, "Invalid auth response")
+
+        val accessToken = resp.accessToken
+        val refreshToken = resp.refreshToken
+        val user = resp.user
+
+        if (accessToken.isNullOrBlank() || refreshToken.isNullOrBlank() || user == null || user.id.isBlank()) {
+            throw SupabaseApiException(500, body, "Missing token in auth response")
+        }
+
+        val now = System.currentTimeMillis() / 1000
+        val expiresAt = now + (resp.expiresIn ?: 3600)
+
+        val nickname = user.userMetadata?.nickname
+            ?.takeIf { it.isNotBlank() }
+            ?: user.email?.takeIf { it.isNotBlank() }
+            ?: user.id.take(8)
+
+        val avatarUrl = user.userMetadata?.avatarUrl
+            ?.takeIf { it.isNotBlank() }
+
+        val session = SupabaseSession(
+            accessToken = accessToken,
+            refreshToken = refreshToken,
+            expiresAtEpochSeconds = expiresAt,
+            userId = user.id,
+            nickname = nickname,
+            email = user.email,
+            avatarUrl = avatarUrl
+        )
+
+        SupabaseSessionRepository.save(context, session)
+        _session.value = session
+        return session
+    }
+
+    suspend fun requestEmailChange(
+        context: Context,
+        newEmail: String
+    ) {
+        val cleaned = newEmail.trim().takeIf { it.isNotBlank() }
+            ?: throw IllegalArgumentException("Email is blank")
+
+        val accessToken = getValidAccessToken(context)
+            ?: throw IllegalStateException("Not logged in")
+
+        val url = ("${SupabaseConfig.authBaseUrl}/user").toHttpUrl()
+        val payload = updateUserMapAdapter.toJson(mapOf("email" to cleaned))
+        val request = SupabaseHttp.baseRequestBuilder(url, accessToken)
+            .put(payload.toRequestBody(SupabaseHttp.jsonMediaType))
+            .build()
+
+        SupabaseHttp.execute(request)
+    }
+
+    suspend fun sendPasswordRecoveryEmail(email: String) {
+        val cleaned = email.trim().takeIf { it.isNotBlank() }
+            ?: throw IllegalArgumentException("Email is blank")
+
+        val url = ("${SupabaseConfig.authBaseUrl}/recover").toHttpUrl()
+        val payload = updateUserMapAdapter.toJson(mapOf("email" to cleaned))
+        val request = SupabaseHttp.baseRequestBuilder(url)
+            .post(payload.toRequestBody(SupabaseHttp.jsonMediaType))
+            .build()
+
+        SupabaseHttp.execute(request)
+    }
+
+    suspend fun resendSignupEmail(email: String) {
+        val cleaned = email.trim().takeIf { it.isNotBlank() }
+            ?: throw IllegalArgumentException("Email is blank")
+
+        val url = ("${SupabaseConfig.authBaseUrl}/resend").toHttpUrl()
+        val payload = updateUserMapAdapter.toJson(
+            mapOf(
+                "type" to "signup",
+                "email" to cleaned
+            )
+        )
+        val request = SupabaseHttp.baseRequestBuilder(url)
+            .post(payload.toRequestBody(SupabaseHttp.jsonMediaType))
+            .build()
+
+        SupabaseHttp.execute(request)
+    }
+
+    suspend fun resetPasswordWithRecoveryOtp(
+        context: Context,
+        email: String,
+        token: String,
+        newPassword: String
+    ): SupabaseSession {
+        val cleanedPassword = newPassword.takeIf { it.isNotBlank() }
+            ?: throw IllegalArgumentException("Password is blank")
+
+        val verified = verifyEmailOtp(
+            context = context,
+            email = email,
+            token = token,
+            type = "recovery"
+        )
+
+        val url = ("${SupabaseConfig.authBaseUrl}/user").toHttpUrl()
+        val payload = updateUserMapAdapter.toJson(mapOf("password" to cleanedPassword))
+        val request = SupabaseHttp.baseRequestBuilder(url, verified.accessToken)
+            .put(payload.toRequestBody(SupabaseHttp.jsonMediaType))
+            .build()
+
+        val body = SupabaseHttp.execute(request)
+        val user = userAdapter.fromJson(body)
+            ?: throw SupabaseApiException(500, body, "Invalid user response")
+
+        val resolvedNickname = user.userMetadata?.nickname
+            ?.takeIf { it.isNotBlank() }
+            ?: verified.nickname
+
+        val resolvedAvatarUrl = user.userMetadata?.avatarUrl
+            ?.takeIf { it.isNotBlank() }
+            ?: verified.avatarUrl
+
+        val updated = verified.copy(
+            userId = user.id,
+            email = user.email ?: verified.email,
+            nickname = resolvedNickname,
+            avatarUrl = resolvedAvatarUrl
+        )
+
+        SupabaseSessionRepository.save(context, updated)
+        _session.value = updated
+        return updated
     }
 
     suspend fun signInWithPassword(
