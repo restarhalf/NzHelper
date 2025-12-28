@@ -50,3 +50,7 @@
 -keep class me.restarhalf.deer.ui.util.GitHubRelease {
     *;
 }
+
+-keep class me.restarhalf.deer.data.supabase.** {
+    *;
+}

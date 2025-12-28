@@ -37,7 +37,6 @@ android {
 
         val commitCount = getGitCommitCount()
         val gitHash = getGitShortHash()
-
         versionCode = getGitCommitCount()
         versionName = "1.0.0.beta.$commitCount.$gitHash"
 
@@ -74,6 +73,7 @@ android {
 
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("debug")
             isMinifyEnabled = true
             isShrinkResources = true // 移除无用资源
             proguardFiles(
