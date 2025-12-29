@@ -54,3 +54,7 @@
 -keep class me.restarhalf.deer.data.supabase.** {
     *;
 }
+
+-keep class me.restarhalf.deer.data.imgbb.** {
+    *;
+}

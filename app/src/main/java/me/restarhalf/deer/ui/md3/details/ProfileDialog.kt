@@ -67,8 +67,8 @@ fun ProfileDialog(
                 )
             } catch (e: SupabaseApiException) {
                 errorText = e.message
-            } catch (e: Exception) {
-                errorText = e.message ?: "上传失败"
+            } catch (t: Throwable) {
+                errorText = t.message ?: "上传失败"
             } finally {
                 busy = false
             }
