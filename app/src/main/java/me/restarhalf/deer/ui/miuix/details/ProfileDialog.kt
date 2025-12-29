@@ -1,9 +1,7 @@
 package me.restarhalf.deer.ui.miuix.details
 
-import android.content.ActivityNotFoundException
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -60,7 +58,7 @@ fun ProfileDialog(
     val showResetPasswordDialog = remember { mutableStateOf(false) }
 
     val pickAvatarLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia()
+        contract = ActivityResultContracts.GetContent()
     ) { uri: Uri? ->
         if (uri == null || session == null) return@rememberLauncherForActivityResult
         if (busy) return@rememberLauncherForActivityResult
@@ -122,15 +120,7 @@ fun ProfileDialog(
                     modifier = Modifier
                         .size(48.dp)
                         .clickable(enabled = !busy && session != null) {
-                            try {
-                                pickAvatarLauncher.launch(
-                                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                                )
-                            } catch (_: ActivityNotFoundException) {
-                                errorText = "无法打开图片选择器"
-                            } catch (e: Exception) {
-                                errorText = e.message ?: "无法打开图片选择器"
-                            }
+                            pickAvatarLauncher.launch("image/*")
                         },
                     containerColor = MiuixTheme.colorScheme.secondaryContainer,
                     contentDescription = "头像"

@@ -38,7 +38,7 @@ android {
         val commitCount = getGitCommitCount()
         val gitHash = getGitShortHash()
         versionCode = getGitCommitCount()
-        versionName = "1.0.0.beta.$commitCount.$gitHash"
+        versionName = "1.0.1.beta.$commitCount.$gitHash"
 
         val envFile = rootProject.file(".env")
         fun readEnv(key: String): String? {
