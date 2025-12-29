@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -39,6 +40,9 @@ import com.google.gson.JsonParser
 import kotlinx.coroutines.launch
 import me.restarhalf.deer.data.Session
 import me.restarhalf.deer.data.SessionRepository
+import me.restarhalf.deer.data.supabase.SupabaseApiException
+import me.restarhalf.deer.data.supabase.SupabaseAuthRepository
+import me.restarhalf.deer.data.supabase.SupabaseHistoryRepository
 import me.restarhalf.deer.ui.miuix.details.DetailsDialog
 import top.yukonga.miuix.kmp.basic.BasicComponent
 import top.yukonga.miuix.kmp.basic.ButtonDefaults
@@ -71,6 +75,12 @@ fun HistoryScreen() {
     val formatter = remember { DateTimeFormatter.ISO_LOCAL_DATE_TIME }
     val sessions = remember { mutableStateListOf<Session>() }
     val scope = rememberCoroutineScope()
+
+    val session by SupabaseAuthRepository.session.collectAsState()
+    var syncBusy by remember { mutableStateOf(false) }
+    var syncError by remember { mutableStateOf<String?>(null) }
+    var syncInfo by remember { mutableStateOf<String?>(null) }
+    val showCloudSyncDialog = remember { mutableStateOf(false) }
 
     var editSession by remember { mutableStateOf<Session?>(null) }
     var showDetailsDialog by remember { mutableStateOf(false) }
@@ -167,8 +177,8 @@ fun HistoryScreen() {
                         putString("sessions", jsonStr)
                     }
                 }
+            }
         }
-    }
 
 
     LaunchedEffect(Unit) {
@@ -200,7 +210,7 @@ fun HistoryScreen() {
                             alignment = PopupPositionProvider.Align.BottomRight,
                             onDismissRequest = { showMenu.value = false }
                         ) {
-                            val menuItems = listOf("导出数据", "导入数据", "清除全部记录")
+                            val menuItems = listOf("导出数据", "导入数据", "云同步", "清除全部记录")
                             ListPopupColumn {
                                 menuItems.forEachIndexed { index, text ->
                                     DropdownImpl(
@@ -212,7 +222,13 @@ fun HistoryScreen() {
                                             when (selectedIdx) {
                                                 0 -> exportLauncher.launch("NzHelper_export.json")
                                                 1 -> importLauncher.launch(arrayOf("application/json"))
-                                                2 -> showClearDialog.value = true
+                                                2 -> {
+                                                    syncError = null
+                                                    syncInfo = null
+                                                    showCloudSyncDialog.value = true
+                                                }
+
+                                                3 -> showClearDialog.value = true
                                             }
                                         },
                                         index = index
@@ -293,6 +309,80 @@ fun HistoryScreen() {
                                 }
                             )
                         }
+                    }
+                }
+            }
+
+            if (showCloudSyncDialog.value) {
+                LaunchedEffect(Unit) {
+                    session ?: return@LaunchedEffect
+                    if (syncBusy) return@LaunchedEffect
+
+                    syncBusy = true
+                    syncError = null
+                    syncInfo = null
+                    try {
+                        val result = SupabaseHistoryRepository.smartSync(context)
+                        sessions.clear()
+                        sessions.addAll(result.sessions)
+                        syncInfo = when (result.action) {
+                            SupabaseHistoryRepository.SmartSyncAction.MERGE_UPLOAD ->
+                                "本地较新：合并后已上传云端"
+
+                            SupabaseHistoryRepository.SmartSyncAction.MERGE_DOWNLOAD ->
+                                "云端较新：合并后已下载到本地"
+                        }
+                    } catch (e: SupabaseApiException) {
+                        syncError = e.message
+                    } catch (e: Exception) {
+                        syncError = e.message ?: "同步失败"
+                    } finally {
+                        syncBusy = false
+                    }
+                }
+            }
+
+            SuperDialog(
+                title = "云同步",
+                show = showCloudSyncDialog,
+                onDismissRequest = { showCloudSyncDialog.value = false }
+            ) {
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    val curSession = session
+                    Text(
+                        text = if (curSession == null) {
+                            "未登录，无法云同步"
+                        } else {
+                            "当前账号：${curSession.email ?: curSession.nickname}"
+                        },
+                        style = MiuixTheme.textStyles.body1
+                    )
+
+                    val errorText = syncError
+                    val infoText = syncInfo
+                    if (!errorText.isNullOrBlank()) {
+                        Text(
+                            text = errorText,
+                            color = MiuixTheme.colorScheme.error,
+                            style = MiuixTheme.textStyles.body2
+                        )
+                    } else if (!infoText.isNullOrBlank()) {
+                        Text(
+                            text = infoText,
+                            color = MiuixTheme.colorScheme.primary,
+                            style = MiuixTheme.textStyles.body2
+                        )
+                    }
+
+                    if (syncBusy && curSession != null) {
+                        Text(
+                            text = "同步中...",
+                            color = MiuixTheme.colorScheme.primary,
+                            style = MiuixTheme.textStyles.body2
+                        )
                     }
                 }
             }

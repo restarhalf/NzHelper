@@ -1,7 +1,9 @@
 package me.restarhalf.deer.ui.md3.details
 
+import android.content.ActivityNotFoundException
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -52,7 +54,7 @@ fun ProfileDialog(
     var showResetPasswordDialog by remember { mutableStateOf(false) }
 
     val pickAvatarLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
+        contract = ActivityResultContracts.PickVisualMedia()
     ) { uri: Uri? ->
         if (uri == null || session == null) return@rememberLauncherForActivityResult
         if (busy) return@rememberLauncherForActivityResult
@@ -105,7 +107,15 @@ fun ProfileDialog(
                         modifier = Modifier
                             .size(48.dp)
                             .clickable(enabled = !busy && session != null) {
-                                pickAvatarLauncher.launch("image/*")
+                                try {
+                                    pickAvatarLauncher.launch(
+                                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                                    )
+                                } catch (_: ActivityNotFoundException) {
+                                    errorText = "无法打开图片选择器"
+                                } catch (e: Exception) {
+                                    errorText = e.message ?: "无法打开图片选择器"
+                                }
                             },
                         containerColor = MaterialTheme.colorScheme.primaryContainer,
                         contentDescription = "头像"

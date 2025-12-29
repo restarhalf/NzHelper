@@ -31,6 +31,8 @@ import java.security.MessageDigest
 private object RemoteBitmapLoader {
     private val client = OkHttpClient()
 
+    private const val MAX_DIMENSION = 512
+
     private val cache = object : LruCache<String, Bitmap>(20 * 1024) {
         override fun sizeOf(key: String, value: Bitmap): Int {
             return value.byteCount / 1024
@@ -56,11 +58,63 @@ private object RemoteBitmapLoader {
         val file = cacheFile(context, url)
         if (!file.exists()) return null
 
-        val bitmap = BitmapFactory.decodeFile(file.absolutePath)
+        val bitmap = decodeBitmapFile(file.absolutePath)
         if (bitmap == null) {
             file.delete()
         }
         return bitmap
+    }
+
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int
+    ): Int {
+        val height = options.outHeight
+        val width = options.outWidth
+        if (height <= 0 || width <= 0) return 1
+
+        var inSampleSize = 1
+        if (height > reqHeight || width > reqWidth) {
+            var halfHeight = height / 2
+            var halfWidth = width / 2
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize.coerceAtLeast(1)
+    }
+
+    private fun decodeBitmapBytes(bytes: ByteArray): Bitmap? {
+        return try {
+            val opts = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, opts)
+            opts.inSampleSize = calculateInSampleSize(opts, MAX_DIMENSION, MAX_DIMENSION)
+            opts.inJustDecodeBounds = false
+            BitmapFactory.decodeByteArray(bytes, 0, bytes.size, opts)
+        } catch (_: OutOfMemoryError) {
+            null
+        } catch (_: Exception) {
+            null
+        }
+    }
+
+    private fun decodeBitmapFile(path: String): Bitmap? {
+        return try {
+            val opts = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            BitmapFactory.decodeFile(path, opts)
+            opts.inSampleSize = calculateInSampleSize(opts, MAX_DIMENSION, MAX_DIMENSION)
+            opts.inJustDecodeBounds = false
+            BitmapFactory.decodeFile(path, opts)
+        } catch (_: OutOfMemoryError) {
+            null
+        } catch (_: Exception) {
+            null
+        }
     }
 
     private fun writeToDisk(context: Context, url: String, bytes: ByteArray) {
@@ -90,23 +144,28 @@ private object RemoteBitmapLoader {
             return@withContext bitmap
         }
 
-        val request = Request.Builder()
-            .url(url)
-            .build()
+        val request = try {
+            Request.Builder()
+                .url(url)
+                .build()
+        } catch (_: IllegalArgumentException) {
+            return@withContext null
+        }
 
         try {
             client.newCall(request).execute().use { resp ->
                 if (!resp.isSuccessful) return@withContext null
 
-                val body = resp.body
-                val bytes = body.bytes()
-                val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                val bytes = resp.body.bytes()
+                val bitmap = decodeBitmapBytes(bytes)
                     ?: return@withContext null
 
                 writeToDisk(context, url, bytes)
                 put(url, bitmap)
                 bitmap
             }
+        } catch (_: OutOfMemoryError) {
+            null
         } catch (_: Exception) {
             null
         }
@@ -120,6 +179,11 @@ fun rememberRemoteImageBitmap(url: String?): State<ImageBitmap?> {
     return produceState<ImageBitmap?>(initialValue = null, url) {
         val cleaned = url?.trim()?.takeIf { it.isNotBlank() }
         if (cleaned == null) {
+            value = null
+            return@produceState
+        }
+
+        if (!(cleaned.startsWith("http://") || cleaned.startsWith("https://"))) {
             value = null
             return@produceState
         }

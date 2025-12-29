@@ -40,6 +40,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateListOf
@@ -60,6 +61,9 @@ import com.google.gson.JsonParser
 import kotlinx.coroutines.launch
 import me.restarhalf.deer.data.Session
 import me.restarhalf.deer.data.SessionRepository
+import me.restarhalf.deer.data.supabase.SupabaseApiException
+import me.restarhalf.deer.data.supabase.SupabaseAuthRepository
+import me.restarhalf.deer.data.supabase.SupabaseHistoryRepository
 import me.restarhalf.deer.ui.md3.details.DetailsDialog
 import java.io.OutputStreamWriter
 import java.time.LocalDateTime
@@ -86,6 +90,11 @@ fun HistoryScreen() {
     val sessions = remember { mutableStateListOf<Session>() }
 
     val scope = rememberCoroutineScope()
+    val session by SupabaseAuthRepository.session.collectAsState()
+    var syncBusy by remember { mutableStateOf(false) }
+    var syncError by remember { mutableStateOf<String?>(null) }
+    var syncInfo by remember { mutableStateOf<String?>(null) }
+    var showCloudSyncDialog by remember { mutableStateOf(false) }
     var editSession by remember { mutableStateOf<Session?>(null) }
     var showDetailsDialog by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
@@ -183,8 +192,9 @@ fun HistoryScreen() {
                         putString("sessions", jsonStr)
                     }
                 }
+            }
         }
-    }
+
 
     // 读取历史（兼容旧版）
     LaunchedEffect(Unit) {
@@ -217,6 +227,15 @@ fun HistoryScreen() {
                             onClick = {
                                 showMenu = false
                                 importLauncher.launch(arrayOf("application/json"))
+                            }
+                        )
+                        DropdownMenuItem(
+                            text = { Text("云同步") },
+                            onClick = {
+                                showMenu = false
+                                syncError = null
+                                syncInfo = null
+                                showCloudSyncDialog = true
                             }
                         )
                         DropdownMenuItem(
@@ -315,24 +334,86 @@ fun HistoryScreen() {
                     text = { Text("确认删除此记录？") },
                     confirmButton = {
                         TextButton(onClick = {
-                            sessions.remove(sessionToDelete)
-                            prefs.edit {
-                                putString(
-                                    "sessions",
-                                    gson.toJson(sessions.map {
-                                        listOf(
-                                            it.timestamp.format(formatter),
-                                            it.duration,
-                                            it.remark
-                                        )
-                                    })
-                                )
+                            val target = sessionToDelete
+                            if (target != null) {
+                                sessions.remove(target)
+                                scope.launch { SessionRepository.saveSessions(context, sessions) }
                             }
                             sessionToDelete = null
                         }) { Text("确认") }
                     },
                     dismissButton = {
                         TextButton(onClick = { sessionToDelete = null }) { Text("取消") }
+                    }
+                )
+            }
+
+            if (showCloudSyncDialog) {
+                LaunchedEffect(Unit) {
+                    val curSession = session
+                    if (curSession == null) return@LaunchedEffect
+                    if (syncBusy) return@LaunchedEffect
+
+                    syncBusy = true
+                    syncError = null
+                    syncInfo = null
+                    try {
+                        val result = SupabaseHistoryRepository.smartSync(context)
+                        sessions.clear()
+                        sessions.addAll(result.sessions)
+                        syncInfo = when (result.action) {
+                            SupabaseHistoryRepository.SmartSyncAction.MERGE_UPLOAD ->
+                                "本地较新：合并后已上传云端"
+
+                            SupabaseHistoryRepository.SmartSyncAction.MERGE_DOWNLOAD ->
+                                "云端较新：合并后已下载到本地"
+                        }
+                    } catch (e: SupabaseApiException) {
+                        syncError = e.message
+                    } catch (e: Exception) {
+                        syncError = e.message ?: "同步失败"
+                    } finally {
+                        syncBusy = false
+                    }
+                }
+
+                AlertDialog(
+                    onDismissRequest = { showCloudSyncDialog = false },
+                    title = { Text("云同步") },
+                    text = {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            val curSession = session
+                            Text(
+                                text = if (curSession == null) {
+                                    "未登录，无法云同步"
+                                } else {
+                                    "当前账号：${curSession.email ?: curSession.nickname}"
+                                }
+                            )
+
+                            val errorText = syncError
+                            val infoText = syncInfo
+                            if (!errorText.isNullOrBlank()) {
+                                Text(
+                                    text = errorText,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            } else if (!infoText.isNullOrBlank()) {
+                                Text(
+                                    text = infoText,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+
+                            if (syncBusy && curSession != null) {
+                                Text(text = "同步中...", color = MaterialTheme.colorScheme.primary)
+                            }
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(onClick = { showCloudSyncDialog = false }) { Text("关闭") }
                     }
                 )
             }

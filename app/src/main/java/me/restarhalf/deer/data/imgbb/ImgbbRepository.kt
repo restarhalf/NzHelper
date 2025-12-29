@@ -1,6 +1,8 @@
 package me.restarhalf.deer.data.imgbb
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import com.squareup.moshi.Json
 import kotlinx.coroutines.Dispatchers
@@ -13,6 +15,7 @@ import okhttp3.MultipartBody
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.ByteArrayOutputStream
 
 class ImgbbApiException(
     val statusCode: Int,
@@ -35,19 +38,73 @@ object ImgbbRepository {
     private val client = OkHttpClient()
     private val uploadAdapter = SupabaseHttp.moshi.adapter(ImgbbUploadResponse::class.java)
 
+    private const val MAX_DIMENSION = 1024
+    private const val JPEG_QUALITY = 85
+
     suspend fun uploadImage(
         context: Context,
         uri: Uri,
         fileName: String = "avatar"
     ): String {
         val bytes = withContext(Dispatchers.IO) {
-            context.contentResolver.openInputStream(uri)?.use { it.readBytes() }
+            readAndCompressJpeg(context = context, uri = uri)
         } ?: throw IllegalArgumentException("Failed to read image")
 
         return uploadImageBytes(
             imageBytes = bytes,
             fileName = fileName
         )
+    }
+
+    private fun calculateInSampleSize(
+        options: BitmapFactory.Options,
+        reqWidth: Int,
+        reqHeight: Int
+    ): Int {
+        val height = options.outHeight
+        val width = options.outWidth
+        if (height <= 0 || width <= 0) return 1
+
+        var inSampleSize = 1
+        if (height > reqHeight || width > reqWidth) {
+            val halfHeight = height / 2
+            val halfWidth = width / 2
+            while ((halfHeight / inSampleSize) >= reqHeight && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2
+            }
+        }
+        return inSampleSize.coerceAtLeast(1)
+    }
+
+    private fun readAndCompressJpeg(context: Context, uri: Uri): ByteArray? {
+        return try {
+            val resolver = context.contentResolver
+
+            val boundsOpts = BitmapFactory.Options().apply {
+                inJustDecodeBounds = true
+            }
+            resolver.openInputStream(uri)?.use { input ->
+                BitmapFactory.decodeStream(input, null, boundsOpts)
+            } ?: return null
+
+            val decodeOpts = BitmapFactory.Options().apply {
+                inSampleSize = calculateInSampleSize(boundsOpts, MAX_DIMENSION, MAX_DIMENSION)
+                inJustDecodeBounds = false
+            }
+
+            val bitmap = resolver.openInputStream(uri)?.use { input ->
+                BitmapFactory.decodeStream(input, null, decodeOpts)
+            } ?: return null
+
+            val out = ByteArrayOutputStream()
+            bitmap.compress(Bitmap.CompressFormat.JPEG, JPEG_QUALITY, out)
+            bitmap.recycle()
+            out.toByteArray()
+        } catch (_: OutOfMemoryError) {
+            null
+        } catch (_: Exception) {
+            null
+        }
     }
 
     suspend fun uploadImageBytes(

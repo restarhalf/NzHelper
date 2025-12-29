@@ -52,7 +52,7 @@ fun EmailChangeOtpDialog(
         titleColor = MiuixTheme.colorScheme.onSurface,
         show = show,
         enableWindowDim = true,
-        summary = "输入新邮箱并填写验证码（{{ .Token }}）。",
+        summary = "输入新邮箱并填写验证码。",
         summaryColor = MiuixTheme.colorScheme.onSurfaceSecondary,
         onDismissRequest = {
             if (busy) return@SuperDialog
