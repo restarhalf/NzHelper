@@ -147,7 +147,7 @@ fun AboutScreen(
                             Icon(
                                 modifier = Modifier.padding(end = 16.dp),
                                 imageVector = MiuixIcons.GitHub,
-                                contentDescription = "Github",
+                                contentDescription = "仓库",
                                 tint = MiuixTheme.colorScheme.onBackground
                             )
                         },
@@ -171,7 +171,7 @@ fun AboutScreen(
                             Icon(
                                 modifier = Modifier.padding(end = 16.dp),
                                 imageVector = MiuixIcons.Merge,
-                                contentDescription = "Code",
+                                contentDescription = "代码",
                                 tint = MiuixTheme.colorScheme.onBackground
                             )
                         },
@@ -189,7 +189,7 @@ fun AboutScreen(
                             Icon(
                                 modifier = Modifier.padding(end = 16.dp),
                                 imageVector = MiuixIcons.Contacts,
-                                contentDescription = "Reward",
+                                contentDescription = "赞赏",
                                 tint = MiuixTheme.colorScheme.onBackground
                             )
                         },
