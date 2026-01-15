@@ -24,13 +24,11 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import me.restarhalf.deer.R
 import me.restarhalf.deer.ui.custom.icons.GitHub
 import top.yukonga.miuix.kmp.basic.BasicComponent
@@ -202,12 +200,4 @@ fun AboutScreen(
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun AboutScreenPreview() {
-    AboutScreen(
-        navController = rememberNavController()
-    )
 }

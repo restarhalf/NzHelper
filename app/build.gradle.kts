@@ -10,12 +10,13 @@ android {
 
     defaultConfig {
         applicationId = "me.restarhalf.deer"
-        minSdk = 26
+        minSdk = 28
         targetSdk = 36
 
-        versionName = "v1.0.1"
+        versionName = "v1.0.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        versionCode = 2
     }
 
     buildTypes {
@@ -63,11 +64,7 @@ dependencies {
     implementation(libs.ucrop)
     implementation(libs.pictureselector)
     implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.moshi)
     implementation(libs.moshi.kotlin)
     implementation(libs.coil3.coil.compose)
     implementation(libs.okhttp)

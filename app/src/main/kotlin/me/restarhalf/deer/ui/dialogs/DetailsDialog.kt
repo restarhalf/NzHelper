@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import me.restarhalf.deer.data.SessionDraft
 import me.restarhalf.deer.ui.components.TwoTextButtonsRow
@@ -158,16 +157,4 @@ fun DetailsDialog(
             )
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DetailsDialogPreview() {
-    DetailsDialog(
-        show = true,
-        draft = SessionDraft(rating = 2.5f),
-        onDraftChange = {},
-        onConfirm = {},
-        onDismiss = {}
-    )
 }

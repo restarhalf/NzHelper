@@ -12,7 +12,6 @@ activityCompose = "1.12.2"
 composeBom = "2025.12.01"
 miuixAndroid = "0.8.0-rc04"
 miuixIconsAndroid = "0.8.0-rc04"
-moshi = "1.15.2"
 moshiKotlin = "1.15.2"
 navigationCompose = "2.9.6"
 okhttp = "5.3.2"
@@ -30,18 +29,14 @@ androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-co
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
-androidx-ui = { group = "androidx.compose.ui", name = "ui" }
-androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
-androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
-miuix-android = { module = "top.yukonga.miuix.kmp:miuix-android", version.ref = "miuixAndroid" }
+miuix-android = { module = "top.yukonga.miuix.kmp:miuix-android", version = "0.8.0-rc04" }
 miuix-icons-android = { module = "top.yukonga.miuix.kmp:miuix-icons-android", version.ref = "miuixIconsAndroid" }
-moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
 moshi-kotlin = { module = "com.squareup.moshi:moshi-kotlin", version.ref = "moshiKotlin" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-pictureselector = { module = "io.github.lucksiege:pictureselector", version.ref = "pictureselector" }
+pictureselector = { module = "io.github.lucksiege:pictureselector", version = "v3.11.3" }
 ucrop = { module = "com.github.yalantis:ucrop", version.ref = "ucrop" }
 
 [plugins]

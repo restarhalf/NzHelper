@@ -18,11 +18,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import me.restarhalf.deer.R
 import top.yukonga.miuix.kmp.basic.BasicComponent
 import top.yukonga.miuix.kmp.basic.Card
@@ -259,12 +257,4 @@ private fun GetIcon(author: String) {
             tint = MiuixTheme.colorScheme.onBackground
         )
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun OpenSourceScreenPreview() {
-    OpenSourceScreen(
-        navController = rememberNavController()
-    )
 }
